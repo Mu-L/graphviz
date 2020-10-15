@@ -37,7 +37,8 @@ __all__ = ['Graph', 'Digraph',
            'escape', 'nohtml',
            'render', 'pipe', 'unflatten', 'version', 'view',
            'ENGINES', 'FORMATS', 'RENDERERS', 'FORMATTERS',
-           'ExecutableNotFound', 'RequiredArgumentError']
+           'ExecutableNotFound', 'RequiredArgumentError',
+           'set_default_engine', 'set_default_format']
 
 __title__ = 'graphviz'
 __version__ = '0.17.dev0'
@@ -60,3 +61,25 @@ RENDERERS = RENDERERS
 ExecutableNotFound = ExecutableNotFound
 
 RequiredArgumentError = RequiredArgumentError
+
+
+def set_default_engine(engine):
+    if engine not in ENGINES:
+        raise ValueError('unknown engine: %r' % engine)
+
+    from .files import Base
+
+    old_default_engine = Base._engine
+    Base._engine = engine
+    return old_default_engine
+
+
+def set_default_format(format):
+    if format not in FORMATS:
+        raise ValueError('unknown format: %r' % format)
+
+    from .files import Base
+
+    old_default_format = Base._format
+    Base._format = format
+    return old_default_format
